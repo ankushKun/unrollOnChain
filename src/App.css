@@ -28,12 +28,7 @@
   margin: 10px;
 }
 
-.content{
-  border-radius: 10px;
-  max-width: 75vw;
-  /* box-shadow: gray 0px 0px 10px; */
-  padding-inline: 10px;
-}
+
 
 .avatar{
   margin-right: 10px;
@@ -62,6 +57,6 @@
 
 .postImage{
   margin-top: 10px;
-  max-width: calc(80vw - 10vw);
-  border-radius: 2px;
+  max-width: 600px;
+  border-radius: 3px;
 }

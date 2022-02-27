@@ -2,7 +2,18 @@ import { useParams } from "react-router-dom";
 import React from "react";
 import axios from "axios";
 import baseApi from "../tools/baseApi";
-
+import {
+  TwitterTimelineEmbed,
+  TwitterShareButton,
+  TwitterFollowButton,
+  TwitterHashtagButton,
+  TwitterMentionButton,
+  TwitterTweetEmbed,
+  TwitterMomentShare,
+  TwitterDMButton,
+  TwitterVideoEmbed,
+  TwitterOnAirButton,
+} from "react-twitter-embed";
 function timeConverter(epochs) {
   var myDate = new Date(epochs / 1000000);
   return myDate.toGMTString(); // Sun, 06 Feb 2022 09:12:49 GMT
@@ -45,40 +56,63 @@ function Post() {
   }, [data, loading, postHashHex]);
 
   return (
-    <div className='container justify-self-center py-3'>
+    <div className='container my-2'>
       {data ? (
         <>
-          <div className='VAlign'>
-            <img
-              className='avatar'
-              src={data.PostExtraData.twitterPFP}
-              alt='avatar'
-            />
-            <div className='HAlign'>
-              <div className='username'>
-                {data.PostExtraData.twitterUsername}
+          <div className=''>
+            <div className='container'>
+              <div>
+                <div className='d-flex'>
+                  <div className='  align-self-center'>
+                    <div
+                      style={{
+                        backgroundImage: `url(${data.PostExtraData.twitterPFP})`,
+                        width: "50px",
+                        height: "50px",
+                        backgroundPosition: "center",
+                        backgroundSize: "cover",
+                        borderRadius: "50%",
+                        backgroundRepeat: "no-repeat",
+                      }}></div>
+                  </div>
+                  <div className='mx-3'>
+                    <p className='username my-2'>
+                      {data.PostExtraData.twitterUsername}
+                    </p>
+
+                    <div className='twitterTag'>
+                      <i className='fas fa-twitter icon'> </i>
+                      {data.PostExtraData.twitterTag}
+                    </div>
+                    <div className='dateTweeted'>
+                      {timeConverter(data.TimestampNanos)}
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className='username'>{data.PostExtraData.twitterTag}</div>
-              <div className='date'>{timeConverter(data.TimestampNanos)}</div>
             </div>
-          </div>
-          <div className='HAlign'>
-            <br />
-            <div className='postBody'>
+            <div className='contanier my-4'>
               {threadPosts.map((post, index) => {
                 return (
-                  <div key={index}>
-                    <div>{post}</div>
+                  <div key={index} className='container my-3'>
+                    <p className='threadText'>{post}</p>
                     {listOfImages[index] !== "" ? (
-                      <img
-                        className='postImage'
-                        src={listOfImages[index]}
-                        alt='post-attachment'
-                      />
+                      <div className='d-flex justify-content-center '>
+                        <div className='threadImage'>
+                          <img
+                            className='img-fluid threadImg justify-self-center'
+                            src={listOfImages[index]}
+                            alt='post'
+                          />{" "}
+                        </div>
+                      </div>
                     ) : null}
                   </div>
                 );
               })}
+            </div>
+            <div className='tweetContainer'>
+              <TwitterTweetEmbed tweetId={data.PostExtraData.TweetID} />
             </div>
           </div>
         </>
@@ -87,8 +121,6 @@ function Post() {
       )}
     </div>
   );
-
-  // console.log(res.data.PostFound.Body);
 }
 
 export default Post;

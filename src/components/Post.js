@@ -2,23 +2,12 @@ import { useParams } from "react-router-dom";
 import React from "react";
 import axios from "axios";
 import baseApi from "../tools/baseApi";
-import {
-  TwitterTimelineEmbed,
-  TwitterShareButton,
-  TwitterFollowButton,
-  TwitterHashtagButton,
-  TwitterMentionButton,
-  TwitterTweetEmbed,
-  TwitterMomentShare,
-  TwitterDMButton,
-  TwitterVideoEmbed,
-  TwitterOnAirButton,
-} from "react-twitter-embed";
+import { TwitterTweetEmbed } from "react-twitter-embed";
 function timeConverter(epochs) {
   var myDate = new Date(epochs / 1000000);
-  return myDate.toGMTString(); // Sun, 06 Feb 2022 09:12:49 GMT
+  //return myDate.toGMTString(); // Sun, 06 Feb 2022 09:12:49 GMT
   // return myDate.toString(); // 'Sun Feb 06 2022 14:42:49 GMT+0530 (India Standard Time)'
-  // return myDate.toLocaleString(); // '06/02/2022, 14:42:49'
+  return myDate.toLocaleString(); // '06/02/2022, 14:42:49'
 }
 
 function Post() {
@@ -56,64 +45,61 @@ function Post() {
   }, [data, loading, postHashHex]);
 
   return (
-    <div className='container my-2'>
+    <div className='container-sm my-4  px-3'>
       {data ? (
         <>
-          <div className=''>
-            <div className='container'>
-              <div>
-                <div className='d-flex'>
-                  <div className='  align-self-center'>
-                    <div
-                      style={{
-                        backgroundImage: `url(${data.PostExtraData.twitterPFP})`,
-                        width: "50px",
-                        height: "50px",
-                        backgroundPosition: "center",
-                        backgroundSize: "cover",
-                        borderRadius: "50%",
-                        backgroundRepeat: "no-repeat",
-                      }}></div>
+          <div className='flex justify-center my-6'>
+            <div className=''>
+              <div className='userCard flex'>
+                <div
+                  className='profile-pic-container my-auto'
+                  style={{
+                    backgroundImage: `url(${data.PostExtraData.twitterPFP})`,
+                    width: "50px",
+                    height: "50px",
+                    backgroundPosition: "center",
+                    backgroundSize: "cover",
+                    borderRadius: "50%",
+                    backgroundRepeat: "no-repeat",
+                  }}></div>
+                <div className='mx-2'>
+                  <div className='username font-bold'>
+                    {data.PostExtraData.twitterUsername}
                   </div>
-                  <div className='mx-3'>
-                    <p className='username my-2'>
-                      {data.PostExtraData.twitterUsername}
-                    </p>
-
-                    <div className='twitterTag'>
-                      <i className='fas fa-twitter icon'> </i>
-                      {data.PostExtraData.twitterTag}
-                    </div>
-                    <div className='dateTweeted'>
-                      {timeConverter(data.TimestampNanos)}
-                    </div>
+                  <div className='twitterTag font-medium text-blue-600 text-sm'>
+                    {data.PostExtraData.twitterTag}
                   </div>
+                  <div className='dateTweeted font-normal text-xs my-1'>
+                    {timeConverter(data.TimestampNanos)}
+                  </div>{" "}
                 </div>
+               {/*  <button className='button'>Claim this NFT</button> */}
               </div>
-            </div>
-            <div className='contanier my-4'>
-              {threadPosts.map((post, index) => {
-                return (
-                  <div key={index} className='container my-3'>
-                    <p className='threadText'>{post}</p>
-                    {listOfImages[index] !== "" ? (
-                      <div className='d-flex justify-content-center '>
-                        <div className='threadImage'>
+              <div className='my-7'>
+                {threadPosts.map((post, index) => {
+                  return (
+                    <div key={index} className='threadText'>
+                      <div className='container max-w-3xl'>
+                        <p className='text-xl'>{post}</p>
+                      </div>
+
+                      {listOfImages[index] !== "" ? (
+                        <div className='threadImage flex justify-center px-7 my-3  max-w-3xl'>
                           <img
-                            className='img-fluid threadImg justify-self-center'
+                            className='object-cover rounded-lg shadow-sm'
                             src={listOfImages[index]}
                             alt='post'
                           />{" "}
                         </div>
-                      </div>
-                    ) : null}
-                  </div>
-                );
-              })}
+                      ) : null}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-            <div className='tweetContainer'>
-              <TwitterTweetEmbed tweetId={data.PostExtraData.TweetID} />
-            </div>
+          </div>
+          <div className='tweetContainer'>
+            <TwitterTweetEmbed tweetId={data.PostExtraData.TweetID} />
           </div>
         </>
       ) : (

@@ -1,26 +1,4 @@
-.username {
-  font-size: 1.1em;
-  font-weight: bold;
-}
-.twitterTag {
-  font-size: 0.9em;
-  font-weight: bold;
-}
-.dateTweeted {
-  font-size: 0.8em;
-  font-weight: bold;
-}
-.threadText {
-  font-size: 1.4em;
-}
-.threadImage {
-  max-width: 800px;
-}
-.threadImg {
-  border-radius: 5px;
-}
 .tweetContainer div {
   display: flex;
-
   justify-content: center;
 }

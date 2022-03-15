@@ -78,7 +78,7 @@ function Post() {
               <div className='my-7'>
                 {threadPosts.map((post, index) => {
                   return (
-                    <div key={index} className='threadText'>
+                    <div key={index} className='threadText my-4'>
                       <div className='container max-w-3xl'>
                         <p className='text-xl'>{post}</p>
                       </div>

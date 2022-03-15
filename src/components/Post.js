@@ -76,7 +76,7 @@ function Post() {
                   </div>
                 </div>
                 <div className='flex justify-end'>
-                  <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-2 rounded w-36 h-10'>
+                  <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 my-2 rounded w-34 h-10'>
                     Claim this NFT
                   </button>
                 </div>{" "}

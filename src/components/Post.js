@@ -50,30 +50,36 @@ function Post() {
         <>
           <div className='flex justify-center my-6'>
             <div className=''>
-              <div className='userCard flex'>
-                <div
-                  className='profile-pic-container my-auto'
-                  style={{
-                    backgroundImage: `url(${data.PostExtraData.twitterPFP})`,
-                    width: "50px",
-                    height: "50px",
-                    backgroundPosition: "center",
-                    backgroundSize: "cover",
-                    borderRadius: "50%",
-                    backgroundRepeat: "no-repeat",
-                  }}></div>
-                <div className='mx-2'>
-                  <div className='username font-bold'>
-                    {data.PostExtraData.twitterUsername}
+              <div className='grid grid-rows-1 grid-flow-col'>
+                <div className='userCard flex'>
+                  <div
+                    className='profile-pic-container my-auto'
+                    style={{
+                      backgroundImage: `url(${data.PostExtraData.twitterPFP})`,
+                      width: "50px",
+                      height: "50px",
+                      backgroundPosition: "center",
+                      backgroundSize: "cover",
+                      borderRadius: "50%",
+                      backgroundRepeat: "no-repeat",
+                    }}></div>
+                  <div className='mx-2'>
+                    <div className='username font-bold'>
+                      {data.PostExtraData.twitterUsername}
+                    </div>
+                    <div className='twitterTag font-medium text-blue-600 text-sm'>
+                      {data.PostExtraData.twitterTag}
+                    </div>
+                    <div className='dateTweeted font-normal text-xs my-1'>
+                      {timeConverter(data.TimestampNanos)}
+                    </div>{" "}
                   </div>
-                  <div className='twitterTag font-medium text-blue-600 text-sm'>
-                    {data.PostExtraData.twitterTag}
-                  </div>
-                  <div className='dateTweeted font-normal text-xs my-1'>
-                    {timeConverter(data.TimestampNanos)}
-                  </div>{" "}
                 </div>
-               {/*  <button className='button'>Claim this NFT</button> */}
+                <div className='flex justify-end'>
+                  <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-2 rounded w-36 h-10'>
+                    Claim this NFT
+                  </button>
+                </div>{" "}
               </div>
               <div className='my-7'>
                 {threadPosts.map((post, index) => {

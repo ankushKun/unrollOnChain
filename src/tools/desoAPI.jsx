@@ -46,7 +46,7 @@ class DesoApi {
     username,
     publicKey,
     lastPostHashHex,
-    numToFetch = 10
+    numToFetch = 18
   ) {
     if (!username && !publicKey) {
       console.log("username or publicKey is required");

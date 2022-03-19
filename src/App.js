@@ -52,9 +52,9 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path='/' element={<Home desoAPI={desoApi} />} />
-        <Route path='/NFT' element={<Home desoAPI={desoApi} />} />
-        <Route path='/NFT/:postHashHex' element={<NFT desoAPI={desoApi} />} />
+        <Route path='/' element={<Home />} />
+        <Route path='/NFT' element={<Home />} />
+        <Route path='/NFT/:postHashHex' element={<NFT />} />
       </Routes>
     </Router>
   );

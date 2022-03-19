@@ -1,6 +1,8 @@
 import logo from "../assets/unrollOnChainLogo.svg";
 import { Link } from "react-router-dom";
-import FontAwesomeIcon from "react-fontawesome";
+
+import timeConverter from "../tools/functions";
+import DesoApi from "../../src/tools/desoAPI";
 import { useState, useEffect } from "react";
 import Loader from "./Loader";
 export default function Home(props) {
@@ -8,11 +10,11 @@ export default function Home(props) {
   const [latestMintedPosts, setLatestMintedPosts] = useState(null);
   const initLatestMintedTweets = async () => {
     try {
-      console.log(props.desoAPI);
-      const latestMints = await props.desoAPI.getPostsForPublicKey(
-        "MintedTweet"
-      );
-      setLatestMintedPosts(latestMints);
+      const da = new DesoApi();
+
+      const latestMints = await da.getPostsForPublicKey("MintedTweet");
+
+      setLatestMintedPosts(latestMints["Posts"]);
     } catch (e) {
       console.log(e);
     }
@@ -21,6 +23,7 @@ export default function Home(props) {
   useEffect(async () => {
     setIsLoadingRecentTweets(true);
     await initLatestMintedTweets();
+    console.log("all loading done...");
     setIsLoadingRecentTweets(false);
   }, []);
   return (
@@ -61,7 +64,6 @@ export default function Home(props) {
 
           <button className='mx-auto lg:mx-0 hover:underline text-gray-800 font-extrabold rounded my-2 md:my-6 py-4 px-8 shadow-lg w-70'>
             Continue with Twitter{" "}
-            <FontAwesomeIcon icon='fa-brands fa-twitter' />
           </button>
           <a
             href='/'
@@ -84,86 +86,142 @@ export default function Home(props) {
           <Loader />
         ) : (
           <div className='container mx-auto flex flex-wrap pt-4 pb-12'>
-            <div className='w-full md:w-1/3 p-6 flex flex-col flex-grow flex-shrink'>
-              <div className='flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow'>
-                <a
-                  href='#'
-                  className='flex flex-wrap no-underline hover:no-underline'>
-                  <p className='w-full text-gray-600 text-xs md:text-sm px-6 mt-6'>
-                    GETTING STARTED
-                  </p>
-                  <div className='w-full font-bold text-xl text-gray-800 px-6'>
-                    Lorem ipsum dolor sit amet.
-                  </div>
-                  <p className='text-gray-600 text-base px-6 mb-5'>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Aliquam at ipsum eu nunc commodo posuere et sit amet ligula.
-                  </p>
-                </a>
-              </div>
-              <div className='flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow p-6'>
-                <div className='flex items-center justify-start'>
-                  <button className='mx-auto lg:mx-0 hover:underline gradient2 text-gray-800 font-extrabold rounded my-6 py-4 px-8 shadow-lg'>
-                    Action
-                  </button>
-                </div>
-              </div>
-            </div>
+            {latestMintedPosts.map((post, index) => {
+              return (
+                <div className='w-full md:w-1/2 lg:w-1/3 p-4 ' key={index}>
+                  <div className='bg-white rounded-lg shadow-lg '>
+                    <div className='container'>
+                      <a className='flex profileSection flex-wrap p-6'
+                      target={'_blank'}
+                      href = {`https://twitter.com/${post.PostExtraData.twitterTag.slice(1)}`}>
+                        <div className='w-50 h-50 rounded-full'>
+                          <img
+                            className='w-50 h-50 w-full object-cover object-center  rounded-full'
+                            src={post.PostExtraData.twitterPFP}
+                            alt='post'
+                          />
+                        </div>
+                        <div className='mx-2'>
+                          <div className='username font-bold'>
+                            {post.PostExtraData.twitterUsername}
+                          </div>
+                          <div className='twitterTag font-medium text-blue-600 text-sm'>
+                            {post.PostExtraData.twitterTag}
+                          </div>
+                        </div>
+                      </a>
 
-            <div className='w-full md:w-1/3 p-6 flex flex-col flex-grow flex-shrink'>
-              <div className='flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow'>
-                <a
-                  href='#'
-                  className='flex flex-wrap no-underline hover:no-underline'>
-                  <p className='w-full text-gray-600 text-xs md:text-sm px-6 mt-6'>
-                    GETTING STARTED
-                  </p>
-                  <div className='w-full font-bold text-xl text-gray-800 px-6'>
-                    Lorem ipsum dolor sit amet.
-                  </div>
-                  <p className='text-gray-600 text-base px-6 mb-5'>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Aliquam at ipsum eu nunc commodo posuere et sit amet ligula.
-                  </p>
-                </a>
-              </div>
-              <div className='flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow p-6'>
-                <div className='flex items-center justify-center'>
-                  <button className='mx-auto lg:mx-0 hover:underline gradient2 text-gray-800 font-extrabold rounded my-6 py-4 px-8 shadow-lg'>
-                    Action
-                  </button>
-                </div>
-              </div>
-            </div>
+                      <div className='flex flex-wrap justify-center align-text-bottom'>
+                        <div className='flex justify-center'>
+                          <div className='text-gray-800 text-sm'>
+                            {timeConverter(post.PostExtraData.created_at)}
+                          </div>
+                        </div>
+                      </div>
+                      <div className='px-6 py-6 flex justify-center overflow-hidden container-md h-56'>
+                        <div className='text-slate-800 text-xl mb-2'>
+                          {post.Body}
+                        </div>
+                      </div>
 
-            <div className='w-full md:w-1/3 p-6 flex flex-col flex-grow flex-shrink'>
-              <div className='flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow'>
-                <a
-                  href='#'
-                  className='flex flex-wrap no-underline hover:no-underline'>
-                  <p className='w-full text-gray-600 text-xs md:text-sm px-6 mt-6'>
-                    GETTING STARTED
-                  </p>
-                  <div className='w-full font-bold text-xl text-gray-800 px-6'>
-                    Lorem ipsum dolor sit amet.
+                      <div className='flex justify-center mt-auto  rounded-b rounded-t-none overflow-hidden shadow '>
+                        <div className='flex items-center justify-center'>
+                          <Link
+                            to={`/NFT/${post.PostHashHex}`}
+                            className='mx-auto lg:mx-0 hover:underline gradient2 text-gray-800 font-extrabold rounded my-6 py-4 px-8 shadow-lg '>
+                            View
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <p className=' text-gray-600 text-base px-6 mb-5'>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Aliquam at ipsum eu nunc commodo posuere et sit amet ligula.
-                  </p>
-                </a>
-              </div>
-              <div className='flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow p-6'>
-                <div className='flex items-center justify-end'>
-                  <button className='mx-auto lg:mx-0 hover:underline gradient2 text-gray-800 font-extrabold rounded my-6 py-4 px-8 shadow-lg'>
-                    Action
-                  </button>
                 </div>
-              </div>
-            </div>
+              );
+            })}
           </div>
         )}
       </section>
     </div>
   );
+}
+
+{
+  /*
+<div className='w-full md:w-1/3 p-6 flex flex-col flex-grow flex-shrink'>
+<div className='flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow'>
+  <a
+    href='#'
+    className='flex flex-wrap no-underline hover:no-underline'>
+    <p className='w-full text-gray-600 text-xs md:text-sm px-6 mt-6'>
+      GETTING STARTED
+    </p>
+    <div className='w-full font-bold text-xl text-gray-800 px-6'>
+      Lorem ipsum dolor sit amet.
+    </div>
+    <p className='text-gray-600 text-base px-6 mb-5'>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      Aliquam at ipsum eu nunc commodo posuere et sit amet ligula.
+    </p>
+  </a>
+</div>
+<div className='flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow p-6'>
+  <div className='flex items-center justify-start'>
+    <button className='mx-auto lg:mx-0 hover:underline gradient2 text-gray-800 font-extrabold rounded my-6 py-4 px-8 shadow-lg'>
+      Action
+    </button>
+  </div>
+</div>
+</div>
+
+<div className='w-full md:w-1/3 p-6 flex flex-col flex-grow flex-shrink'>
+<div className='flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow'>
+  <a
+    href='#'
+    className='flex flex-wrap no-underline hover:no-underline'>
+    <p className='w-full text-gray-600 text-xs md:text-sm px-6 mt-6'>
+      GETTING STARTED
+    </p>
+    <div className='w-full font-bold text-xl text-gray-800 px-6'>
+      Lorem ipsum dolor sit amet.
+    </div>
+    <p className='text-gray-600 text-base px-6 mb-5'>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      Aliquam at ipsum eu nunc commodo posuere et sit amet ligula.
+    </p>
+  </a>
+</div>
+<div className='flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow p-6'>
+  <div className='flex items-center justify-center'>
+    <button className='mx-auto lg:mx-0 hover:underline gradient2 text-gray-800 font-extrabold rounded my-6 py-4 px-8 shadow-lg'>
+      Action
+    </button>
+  </div>
+</div>
+</div>
+
+<div className='w-full md:w-1/3 p-6 flex flex-col flex-grow flex-shrink'>
+<div className='flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow'>
+  <a
+    href='#'
+    className='flex flex-wrap no-underline hover:no-underline'>
+    <p className='w-full text-gray-600 text-xs md:text-sm px-6 mt-6'>
+      GETTING STARTED
+    </p>
+    <div className='w-full font-bold text-xl text-gray-800 px-6'>
+      Lorem ipsum dolor sit amet.
+    </div>
+    <p className=' text-gray-600 text-base px-6 mb-5'>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      Aliquam at ipsum eu nunc commodo posuere et sit amet ligula.
+    </p>
+  </a>
+</div>
+<div className='flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow p-6'>
+  <div className='flex items-center justify-end'>
+    <button className='mx-auto lg:mx-0 hover:underline gradient2 text-gray-800 font-extrabold rounded my-6 py-4 px-8 shadow-lg'>
+      Action
+    </button>
+  </div>
+</div>
+</div> */
 }

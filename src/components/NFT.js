@@ -6,19 +6,7 @@ import baseApi from "../tools/baseApi";
 import { TwitterTweetEmbed } from "react-twitter-embed";
 import {  Link } from 'react-router-dom';
 import Loader from "./Loader";
-function timeConverter(createdAt) {
-  var respectiveDate = new Date(Date.parse(createdAt));
-  var responseTime = "";
-  responseTime += respectiveDate.toDateString();
-  //get hoour
-  var hour = respectiveDate.getHours();
-  var minute = respectiveDate.getMinutes();
-  // convert hour and minute into am or pm
-  var ampm = hour >= 12 ? "pm" : "am";
-  hour = hour % 12;
-  responseTime = responseTime + " " + hour + ":" + minute + ampm;
-  return responseTime;
-}
+import timeConverter from "../tools/functions";
 
 function NFT() {
   const [loading, setLoading] = React.useState(true);
